@@ -1,0 +1,31 @@
+const child = require('./child');
+const name = require('./name');
+const missingfield = require('./missing.field.exception');
+
+class ChildMapper {
+    constructor() {
+
+    }
+
+    convert(row) {
+
+        if (row === null) {
+            throw new Exception("Cannot convert null row");
+        }
+
+        if (row.firstname === undefined || row.lastname === undefined) {
+           throw new missingfield.MissingFieldException("Row did not have firstname or lastname");
+        }
+
+        const converted = new child.Child({
+            name : new name.Name(row.firstname, row.lastname, row.middlename),
+            id : parseInt(row.id, 10)
+        });
+
+        return converted;
+    }
+};
+
+module.exports = {
+    ChildConverter : ChildMapper
+}
