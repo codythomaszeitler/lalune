@@ -5,6 +5,7 @@ class Database extends database.Database {
     constructor() {
         super();
         this.written = [];
+        this.currentId = 0;
     }
 
     create(object) {
@@ -16,7 +17,7 @@ class Database extends database.Database {
     }
 
     update(object) {
-        
+
     }
 
     delete(object) {
@@ -25,6 +26,8 @@ class Database extends database.Database {
 
     write(object) {
         this.written.push(object);
+        object.id = this.currentId;
+        this.currentId++;
     }
 
     isWritten(object) {
@@ -32,7 +35,7 @@ class Database extends database.Database {
 
         for (let i = 0; i < this.written.length; i++) {
             let current = this.written[i];
-            if (current.isEquals(object)) {
+            if (current.equals(object)) {
                 isWritten = true;
                 break;
             }

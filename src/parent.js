@@ -5,8 +5,13 @@ class Parent {
         this.children = [];
 
         if (details !== undefined) {
+            this.name = details.name;
             this.database = details.database;
         }
+    }
+
+    equals(object) {
+        return this.name.equals(object.name);
     }
 
     add(child) {
