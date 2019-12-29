@@ -2,90 +2,109 @@ const user = require('../src/user');
 const database = require('./database.mock');
 const transaction = require('../src/user.post.transaction');
 
-describe('create user', function() {
+describe('Nominal Transaction', function() {
     test('creating a simple user', function() {
 
         const testDatabase = new database.Database();
         
-        const testUser = new user.User("username", "password");
+        const body = {
+            username : "username",
+            password : "password"
+        };
+
         const testObject = new transaction.UserPostTransaction({
-            user : testUser,
+            body : body,
             database : testDatabase
         });
 
         testObject.execute();
 
-        expect(testDatabase.isWritten(testUser)).toBe(true);
-        expect(testUser.id === undefined).toBe(false);
+        const expected = new user.User(body.username, body.password);
+        expect(testDatabase.isWritten(expected)).toBe(true);
     });
 
     test('creating a user without password', function() {
         const testDatabase = new database.Database();
 
-        const testUser = new user.User("username");
+        const body = {
+            username : "username"
+        };
+
         const testObject = new transaction.UserPostTransaction({
-            user : testUser,
+            body : body,
             database : testDatabase
         });
 
         testObject.execute();
 
-        expect(testDatabase.isWritten(testUser)).toBe(false);
-        expect(testUser.id === undefined).toBe(true);
+        const expected = new user.User(body.username);
+        expect(testDatabase.isWritten(expected)).toBe(false);
     });
 
     test('creating a user with a null password', function() {
         const testDatabase = new database.Database();
 
-        const testUser = new user.User("username", null);
+        const body = {
+            username : "username",
+            password : null
+        };
+
         const testObject = new transaction.UserPostTransaction({
-            user : testUser,
+            body : body,
             database : testDatabase
         });
 
         testObject.execute();
 
-        expect(testDatabase.isWritten(testUser)).toBe(false);
-        expect(testUser.id === undefined).toBe(true);
+        const expected = new user.User(body.username, body.password);
+        expect(testDatabase.isWritten(expected)).toBe(false);
     });
 
     test('creating a user without a username', function() {
         const testDatabase = new database.Database();
 
-        const testUser = new user.User(undefined, "password");
+        const body = {
+            username : undefined,
+            password : "password"
+        };
+
         const testObject = new transaction.UserPostTransaction({
-            user : testUser,
+            body : body,
             database : testDatabase
         });
 
         testObject.execute();
 
-        expect(testDatabase.isWritten(testUser)).toBe(false);
-        expect(testUser.id === undefined).toBe(true);
+        const expected = new user.User(body.username, body.password);
+        expect(testDatabase.isWritten(expected)).toBe(false);
     });
 
     test('creating a user with a null username', function() {
         const testDatabase = new database.Database();
 
-        const testUser = new user.User(null, "password");
+        const body = {
+            username : null,
+            password : "password"
+        };
+        
         const testObject = new transaction.UserPostTransaction({
-            user : testUser,
+            body : body,
             database : testDatabase
         });
 
         testObject.execute();
 
-        expect(testDatabase.isWritten(testUser)).toBe(false);
-        expect(testUser.id === undefined).toBe(true);
+        const expected = new user.User(body.username, body.password);
+        expect(testDatabase.isWritten(expected)).toBe(false);
     });
 
-    test('posting user with null user', function() {
+    test('posting user with null body', function() {
         const testDatabase = new database.Database();
 
         let exceptionThrown = false;
         try {
             new transaction.UserPostTransaction({
-                user : null,
+                body : null,
                 database : testDatabase
             });        
         } catch (e) {
@@ -99,7 +118,10 @@ describe('create user', function() {
         let exceptionThrown = false;
         try {
             new transaction.UserPostTransaction({
-                user : new user.User("username", "password"),
+                body : {
+                    username : "username",
+                    password : "password"
+                },
                 database : null
             });        
         } catch (e) {
