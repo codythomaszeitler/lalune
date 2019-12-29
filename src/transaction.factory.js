@@ -1,3 +1,5 @@
+const userposttransaction = require('./user.post.transaction');
+const parentposttransaction = require('./parent.post.transaction');
 
 class TransactionFactory {
     constructor(details) {
@@ -6,7 +8,7 @@ class TransactionFactory {
         }
     }
 
-    create(databaseType, httpType, body) {
+    create(databaseType, httpType, request) {
 
         if (databaseType === null || databaseType === undefined) {
             throw new Error("Cannot create transaction without database type");
@@ -18,10 +20,15 @@ class TransactionFactory {
 
         let transaction = null;
         
-        if (databaseType === 'users' && httpType === 'POST') {
-            const userposttransaction = require('./user.post.transaction');
+        if (databaseType === databaseTypes.USERS && httpType === httpTypes.POST) {
             transaction = new userposttransaction.UserPostTransaction({
-                body : body,
+                body : request.body,
+                database : this.database
+            });
+        } else if (databaseType === databaseTypes.PARENT && httpType === httpTypes.POST) {
+            transaction = new parentposttransaction.ParentPostTransaction({
+                userid : request.params.userid,
+                parentDetails : request.body,
                 database : this.database
             });
         } else {
@@ -34,7 +41,8 @@ class TransactionFactory {
 };
 
 const databaseTypes = {
-    USERS : 'users'
+    USERS : 'users',
+    PARENT : 'parent'
 };
 Object.freeze(databaseTypes);
 

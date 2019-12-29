@@ -10,6 +10,11 @@ class User {
         isEquals = isEquals && (this.password === object.password);
         return isEquals;
     }
+
+    static parse(json) {
+        const parsed = new User(json.username, json.password);
+        return parsed;
+    }
 };
 
 module.exports = {

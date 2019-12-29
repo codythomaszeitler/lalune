@@ -24,6 +24,7 @@ class UserPostTransaction {
         }
 
         this.database.write(this.user);
+        return this.user;
     }
 };
 

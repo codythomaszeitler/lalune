@@ -7,34 +7,44 @@ const transaction = require('../src/parent.post.transaction');
 describe('parent post transaction', function() {
 
     let testDatabase;
+    let parentDetails;
+
     beforeEach(function(){
         testDatabase = new database.Database();
+
+        parentDetails = {
+            name : {
+                firstName : "Cody",
+                lastName : "Zeitler"
+            }
+        };
     });
 
     test('posting a parent with an associated user', function() {
         const testUser = new user.User("username", "password");
-        testUser.id = 100;
+        testUser.id = 1000;
+        testDatabase.setReadReturn("SELECT * FROM users WHERE id = " + testUser.id + ";", testUser);
 
-        const testParent = new parent.Parent({
-            name : new name.Name("Cody", "Zeitler")
+        const testObject = new transaction.ParentPostTransaction({
+            userid : testUser.id,
+            parentDetails : parentDetails,
+            database : testDatabase
         });
-
-        const testObject = new transaction.ParentPostTransaction(testUser, testParent, testDatabase);
 
         testObject.execute();
 
-        expect(testDatabase.isWritten(testParent)).toBe(true);
-        expect(testParent.userid).toBe(testUser.id);
+        const expected = parent.Parent.parse(parentDetails);
+        expect(testDatabase.isWritten(expected)).toBe(true);
     });
 
-    test('posting a parent without an associated user, throw exception on construction', function() {
-        const testParent = new parent.Parent({
-            name : new name.Name("Cody", "Zeitler")
-        });
-
+    test('posting a parent without an associated user id, throw exception on construction', function() {
         let exceptionThrown = false;
         try {
-            new transaction.ParentPostTransaction(undefined, testParent, testDatabase);
+            new transaction.ParentPostTransaction({
+                userid : undefined, 
+                parentDetails : parentDetails,
+                database : testDatabase
+            });
         } catch (e) {
             exceptionThrown = true;
         }
@@ -42,14 +52,14 @@ describe('parent post transaction', function() {
         expect(exceptionThrown).toBe(true);
     });
 
-    test('posting a parent with a null user, throw exception on construction', function() {
-        const testParent = new parent.Parent({
-            name : new name.Name("Cody", "Zeitler")
-        });
-
+    test('posting a parent with a null user id, throw exception on construction', function() {
         let exceptionThrown = false;
         try {
-            new transaction.ParentPostTransaction(null, testParent, testDatabase);
+            new transaction.ParentPostTransaction({
+                userid : null, 
+                parentDetails : parentDetails,
+                database : testDatabase
+            });
         } catch (e) {
             exceptionThrown = true;
         }
@@ -63,7 +73,11 @@ describe('parent post transaction', function() {
 
         let exceptionThrown = false;
         try {
-            new transaction.ParentPostTransaction(testUser, undefined, testDatabase);
+            new transaction.ParentPostTransaction({
+                userid : testUser.id, 
+                parentDetails : undefined,
+                database : testDatabase
+            });
         } catch (e) {
             exceptionThrown = true;
         }
@@ -76,7 +90,11 @@ describe('parent post transaction', function() {
 
         let exceptionThrown = false;
         try {
-            new transaction.ParentPostTransaction(testUser, null, testDatabase);
+            new transaction.ParentPostTransaction({
+                userid : testUser.id, 
+                parentDetails : null,
+                database : testDatabase
+            });
         } catch (e) {
             exceptionThrown = true;
         }
@@ -93,7 +111,11 @@ describe('parent post transaction', function() {
 
         let exceptionThrown = false;
         try {
-            new transaction.ParentPostTransaction(testUser, testParent, null);
+            new transaction.ParentPostTransaction({
+                userid : testUser.id, 
+                parentDetails : parentDetails,
+                database : null
+            });
         } catch (e) {
             exceptionThrown = true;
         }
@@ -104,51 +126,37 @@ describe('parent post transaction', function() {
         const testUser = new user.User("username", "password");
         testUser.id = 100;
 
-        const testParent = new parent.Parent({
-            name : new name.Name("Cody", "Zeitler")
-        });
-
         let exceptionThrown = false;
         try {
-            new transaction.ParentPostTransaction(testUser, testParent);
+            new transaction.ParentPostTransaction({
+                userid : testUser.id, 
+                parentDetails : parentDetails,
+                database : undefined
+            });
         } catch (e) {
             exceptionThrown = true;
         }
         expect(exceptionThrown).toBe(true);
     });
 
-    test('posting with a user that does not have an id, throw exception', function() {
-        const testUser = new user.User("username", "password");
-
-        const testParent = new parent.Parent({
-            name : new name.Name("Cody", "Zeitler")
-        });
-
-        let exceptionCaught = false;
+    test('given null details, throw an exception', function() {
+        let exceptionThrown = false;
         try {
-            new transaction.ParentPostTransaction(testUser, testParent, testDatabase);
+            new transaction.ParentPostTransaction(null);
         } catch (e) {
-            exceptionCaught = true;
+            exceptionThrown = true;
         }
-    
-        expect(exceptionCaught).toBe(true);
+        expect(exceptionThrown).toBe(true);
     });
 
-    test('posting with a user that has a null id, throw exception', function() {
-        const testUser = new user.User("username", "password");
-        testUser.id = null;
-
-        const testParent = new parent.Parent({
-            name : new name.Name("Cody", "Zeitler")
-        });
-
-        let exceptionCaught = false;
+    test('given undefined details, throw an exception', function() {
+        let exceptionThrown = false;
         try {
-            new transaction.ParentPostTransaction(testUser, testParent, testDatabase);
+            new transaction.ParentPostTransaction();
         } catch (e) {
-            exceptionCaught = true;
+            exceptionThrown = true;
         }
-    
-        expect(exceptionCaught).toBe(true);
+
+        expect(exceptionThrown).toBe(true);
     });
 });
