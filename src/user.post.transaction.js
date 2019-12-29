@@ -1,14 +1,16 @@
+const user = require('./user');
+
 class UserPostTransaction {
     constructor(describe) {
-        if (describe.user === null) {
-            throw new Exception("Cannot post a user that is not null");
+        if (describe.body === null) {
+            throw new Error("Cannot post with a body that is not null");
         }
 
         if (describe.database === null) {
-            throw new Exception("Cannot post a user with a null database");
+            throw new Error("Cannot post a user with a null database");
         }
 
-        this.user = describe.user;
+        this.user = new user.User(describe.body.username, describe.body.password);
         this.database = describe.database;
     }
 
@@ -23,7 +25,6 @@ class UserPostTransaction {
 
         this.database.write(this.user);
     }
-
 };
 
 module.exports = {

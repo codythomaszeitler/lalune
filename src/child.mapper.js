@@ -10,7 +10,7 @@ class ChildMapper {
     convert(row) {
 
         if (row === null) {
-            throw new Exception("Cannot convert null row");
+            throw new Error("Cannot convert null row");
         }
 
         if (row.firstname === undefined || row.lastname === undefined) {
