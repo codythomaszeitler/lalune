@@ -4,10 +4,23 @@ const name = require('./name');
 class Parent {
     constructor(details) {
         this.children = [];
+        this.type = 'parent';
 
         if (details !== undefined) {
             this.name = details.name;
         }
+    }
+
+    getFirstName() {
+        return this.name.getFirstName();
+    }
+
+    getLastName() {
+        return this.name.getLastName();
+    }
+
+    getMiddleName() {
+        return this.name.getMiddleName();
     }
 
     equals(object) {

@@ -3,6 +3,7 @@ class User {
         this.username = username;
         this.password = password;
         this.id = undefined;
+        this.type = 'users';
     }
 
     equals(object) {
