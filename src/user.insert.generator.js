@@ -5,7 +5,7 @@ class UserInsertGenerator {
         }
 
         const query = {
-            text : "INSERT INTO users(username, password, id) VALUES ($1, $2, $3)",
+            text : "INSERT INTO users(username, password, id) VALUES ($1, $2, $3) RETURNING *",
             values : [user.username, user.password, user.id]
         };
         return query;

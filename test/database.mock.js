@@ -1,10 +1,9 @@
-const database = require('../src/database');
-
-class Database extends database.Database {
+class Database {
 
     constructor() {
-        super();
         this.written = [];
+        this.queries = [];
+        this.returnOnRead = {};
         this.currentId = 0;
     }
 
@@ -12,8 +11,26 @@ class Database extends database.Database {
 
     }
 
-    read() {
+    read(selectStatement) {
+        this.queries.push(selectStatement);
+        return this.returnOnRead[selectStatement];
+    }
 
+    containsQuery(query) {
+        let containsQuery = false;
+        for (let i = 0; i < this.queries.length; i++) {
+            let currentQuery = this.queries[i];
+            if (currentQuery === query) {
+                containsQuery = true;
+                break;
+            }
+        }
+
+        return containsQuery;
+    }
+
+    setReadReturn(selectStatement, value) {
+        this.returnOnRead[selectStatement] = value;
     }
 
     update(object) {

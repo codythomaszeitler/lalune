@@ -12,23 +12,30 @@ class Server {
         this.app = express();
         this.app.use(express.json());
         this.app.use(express.urlencoded({ extended: true }));
-
-        this.app.post('/user', (request, response) => {
-            const transactionFactory = new factory.TransactionFactory({
-                database : this.database
-            });
-            const transaction = transactionFactory.create(
-                factory.databaseType.USERS, factory.httpType.POST, request);
-            response.send(JSON.stringify(transaction.execute()));
+        this.transactionFactory = new factory.TransactionFactory({
+            database : this.database
         });
 
-        this.app.post('/user/:userid/parent', (request, response) => {
-            const transactionFactory = new factory.TransactionFactory({
-                database : this.database
-            });
-            const transaction = transactionFactory.create(
-                factory.databaseType.PARENT, factory.httpType.POST, request);
-            response.send(JSON.stringify(transaction.execute()));
+        this.app.post('/user', async (request, response) => {
+            try {
+                const transaction = await this.transactionFactory.create(
+                    factory.databaseType.USERS, factory.httpType.POST, request);
+
+                response.send(await transaction.execute());
+            } catch (e) {
+                console.log(e);
+            }
+        });
+
+        this.app.post('/user/:userid/parent', async (request, response) => {
+            try {
+                const transaction = await this.transactionFactory.create(
+                    factory.databaseType.PARENT, factory.httpType.POST, request);
+        
+                response.send(await transaction.execute());
+            } catch (e) {
+                console.log(e);
+            }
         });
     }
 
@@ -36,6 +43,7 @@ class Server {
         this.server = this.app.listen(this.port, () => {
             console.log(`Example app listening on port ${this.port}!`);
         });
+        this.database.connect();
     }
 
     stop() {

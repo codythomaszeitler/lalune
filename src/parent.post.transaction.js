@@ -20,17 +20,21 @@ class ParentPostTransaction {
             throw new Error("Cannot post without a database");
         }
 
-        const userFinder = new finder.UserFinder(details.database);
-        this.user = userFinder.findById(details.userid);
         this.parent = parent.Parent.parse(details.parentDetails);
         this.database = details.database;
+        this.userid = details.userid;
+        this.user = null;
     }
 
-    execute() {
+    async setup() {
+        const userFinder = new finder.UserFinder(this.database);
+        this.user = await userFinder.findById(this.userid);
+    }
+
+    async execute() {
         this.parent.userid = this.user.id;
-        this.database.write(this.parent);
+        return await this.database.write(this.parent);
     }
-
 };
 
 module.exports = {

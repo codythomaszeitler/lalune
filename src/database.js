@@ -10,6 +10,9 @@ class Database {
             user : 'postgres',
             database : 'postgres'
         });
+
+        this.currentIds = {};
+        this.tableList = ['users', 'parent', 'child', 'sleepevent'];
     }
 
     connect() {
@@ -19,19 +22,36 @@ class Database {
             } else {
                 console.log('connected')
             }
+
+            for (let i = 0; i < this.tableList.length; i++) {
+                const table = this.tableList[i];
+                this.client.query('SELECT MAX(id) FROM ' + table, (err, res) => {
+                    const max = parseInt(res.rows[0].max);
+                    this.currentIds[table] = max + 1;
+                });
+            }
         });
     }
 
-    write(object) {
+    async write(object) {
+
+        var getNextIdAndIncrement = (table) => {
+            const id = this.currentIds[table];
+            this.currentIds[table] = this.currentIds[table] + 1;
+            return id;
+        };
+
+        object.id = getNextIdAndIncrement(object.type);
+
         const generator = new databasestatementgenerator.DatabaseStatementGenerator();
         const query = generator.generateInsertStatement(object);
-        this.client.query(query, (err, res) => {
-            if (err) {
-                console.log(err.stack);
-            } else {
-                console.log(res.rows[0]);
-            }
-        });
+        await this.client.query(query);
+
+        return object;
+    }
+
+    async read(selectStatement) {
+        return await this.client.query(selectStatement);
     }
 
     delete(object) {

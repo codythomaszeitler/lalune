@@ -6,7 +6,7 @@ class ParentInsertGenerator {
         }
 
         const query = {
-            text : "INSERT INTO parent(firstname, lastname, middlename, id, userid) VALUES ($1, $2, $3, $4, $5)",
+            text : "INSERT INTO parent(firstname, lastname, middlename, id, userid) VALUES ($1, $2, $3, $4, $5) RETURNING *",
             values : [parent.getFirstName(), parent.getLastName(), parent.getMiddleName(), parent.id, parent.userid]
         };
         return query;

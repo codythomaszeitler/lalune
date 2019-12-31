@@ -8,7 +8,7 @@ class TransactionFactory {
         }
     }
 
-    create(databaseType, httpType, request) {
+    async create(databaseType, httpType, request) {
 
         if (databaseType === null || databaseType === undefined) {
             throw new Error("Cannot create transaction without database type");
@@ -34,6 +34,10 @@ class TransactionFactory {
         } else {
             throw new Error("Could not create transaction with database-type [" + 
                     databaseType + "] and http-type [" + httpType + "]");
+        }
+
+        if (transaction.setup !== undefined) {
+            await transaction.setup();
         }
 
         return transaction;

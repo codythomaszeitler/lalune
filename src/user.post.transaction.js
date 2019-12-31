@@ -14,7 +14,7 @@ class UserPostTransaction {
         this.database = describe.database;
     }
 
-    execute() {
+    async execute() {
 
         if (this.user.username === null || 
             this.user.username === undefined || 
@@ -23,8 +23,7 @@ class UserPostTransaction {
             return;
         }
 
-        this.database.write(this.user);
-        return this.user;
+        return await this.database.write(this.user);
     }
 };
 
