@@ -16,7 +16,7 @@ describe('generate insert statement', function() {
 
         const query = testObject.generateInsertStatement(testUser);
 
-        expect(query.text).toBe("INSERT INTO users(username, password, id) VALUES ($1, $2, $3)");
+        expect(query.text).toBe("INSERT INTO users(username, password, id) VALUES ($1, $2, $3) RETURNING *");
         expect(query.values).toEqual([testUser.username, testUser.password, testUser.id]);
     });
 
@@ -30,7 +30,7 @@ describe('generate insert statement', function() {
         testParent.userid = 1000;
 
         const query = testObject.generateInsertStatement(testParent);
-        expect(query.text).toBe("INSERT INTO parent(firstname, lastname, middlename, id, userid) VALUES ($1, $2, $3, $4, $5)");
+        expect(query.text).toBe("INSERT INTO parent(firstname, lastname, middlename, id, userid) VALUES ($1, $2, $3, $4, $5) RETURNING *");
         expect(query.values).toEqual(["Cody", "Zeitler", "Thomas", 1000, 1000]);
     });
 

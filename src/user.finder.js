@@ -25,8 +25,7 @@ class UserFinder {
         if (id === undefined) {
             throw new Error("Cannot find a user with an undefined id");
         }
-
-        const result = await this.database.read("SELECT * FROM users WHERE id = " + id + ";");
+        const result = await this.database.read("SELECT * FROM users WHERE id = " + id);
         const found = new user.User(result.rows[0].username, result.rows[0].password);
         found.id = result.rows[0].id;
         return found;

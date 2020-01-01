@@ -14,7 +14,7 @@ describe('creating insert queries', function() {
 
         const query = testObject.generate(testUser);
 
-        expect(query.text).toBe("INSERT INTO users(username, password, id) VALUES ($1, $2, $3)");
+        expect(query.text).toBe("INSERT INTO users(username, password, id) VALUES ($1, $2, $3) RETURNING *");
         expect(query.values).toEqual([testUser.username, testUser.password, testUser.id]);
     });
 

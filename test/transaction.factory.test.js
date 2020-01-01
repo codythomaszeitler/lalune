@@ -3,6 +3,7 @@ const database = require('./database.mock');
 const user = require('../src/user');
 const parent = require('../src/parent');
 const name = require('../src/name');
+const result = require('./database.result.mock');
 
 describe('Transaction Creation', function() {
 
@@ -25,11 +26,12 @@ describe('Transaction Creation', function() {
         };
     });
 
-    test('creation of a nominal parent post transaction', function() {
+    test('creation of a nominal parent post transaction', async function() {
         const testUser = new user.User("testusername", "testpassword");
         testUser.id = 1000;
 
-        testDatabase.setReadReturn("SELECT * FROM users WHERE id = " + testUser.id + ";", testUser);
+        testDatabase.setReadReturn("SELECT * FROM users WHERE id = " + testUser.id, 
+            result.Result.convert(testUser));
 
         const request = {
             params : {
@@ -47,14 +49,14 @@ describe('Transaction Creation', function() {
             name : new name.Name(request.body.name.firstName, request.body.name.lastName)
         });
 
-        const transaction = testObject.create(factory.databaseType.PARENT, factory.httpType.POST, request);
-        transaction.execute();
+        const transaction = await testObject.create(factory.databaseType.PARENT, factory.httpType.POST, request);
+        await transaction.execute();
 
         expect(testDatabase.isWritten(expectedParent)).toBe(true);
     });
 
-    test('creation of UserPostTransaction when users and POST given', function() {
-        const transaction = testObject.create(factory.databaseType.USERS, factory.httpType.POST, transactionDetails);
+    test('creation of UserPostTransaction when users and POST given', async function() {
+        const transaction = await testObject.create(factory.databaseType.USERS, factory.httpType.POST, transactionDetails);
         expect(transaction.user).not.toBe(undefined);
         expect(transaction.user).not.toBe(null);
     }); 

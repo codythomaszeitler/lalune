@@ -51,23 +51,23 @@ describe('find by id', function() {
     });
     test('assert that correct query string goes to database', function() {
         testObject.findById(1000);
-        expect(testDatabase.containsQuery("SELECT * FROM users WHERE id = 1000;")).toBe(true);
+        expect(testDatabase.containsQuery("SELECT * FROM users WHERE id = 1000")).toBe(true);
     });
 
-    test('find by null id, throw exception', function() {
+    test('find by null id, throw exception', async function() {
         let exceptionThrown = false;
         try {
-            testObject.findById(null);
+            await testObject.findById(null);
         } catch (e) {
             exceptionThrown = true;
         }
         expect(exceptionThrown).toBe(true);
     });
 
-    test('find by undefined id, throw exception', function() {
+    test('find by undefined id, throw exception', async function() {
         let exceptionThrown = false;
         try {
-            testObject.findById();
+            await testObject.findById();
         } catch (e) {
             exceptionThrown = true;
         }

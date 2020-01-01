@@ -3,6 +3,7 @@ const parent = require('../src/parent');
 const name = require('../src/name');
 const database = require('./database.mock');
 const transaction = require('../src/parent.post.transaction');
+const result = require('./database.result.mock');
 
 describe('parent post transaction', function() {
 
@@ -20,18 +21,20 @@ describe('parent post transaction', function() {
         };
     });
 
-    test('posting a parent with an associated user', function() {
+    test('posting a parent with an associated user', async function() {
         const testUser = new user.User("username", "password");
         testUser.id = 1000;
-        testDatabase.setReadReturn("SELECT * FROM users WHERE id = " + testUser.id + ";", testUser);
+        testDatabase.setReadReturn("SELECT * FROM users WHERE id = " + testUser.id,
+              result.Result.convert(testUser));
 
         const testObject = new transaction.ParentPostTransaction({
             userid : testUser.id,
             parentDetails : parentDetails,
             database : testDatabase
         });
+        await testObject.setup();
 
-        testObject.execute();
+        await testObject.execute();
 
         const expected = parent.Parent.parse(parentDetails);
         expect(testDatabase.isWritten(expected)).toBe(true);

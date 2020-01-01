@@ -24,7 +24,7 @@ describe('create parent insert statement', function() {
 
         const query = testObject.generate(testParent);
 
-        expect(query.text).toBe("INSERT INTO parent(firstname, lastname, middlename, id, userid) VALUES ($1, $2, $3, $4, $5)");
+        expect(query.text).toBe("INSERT INTO parent(firstname, lastname, middlename, id, userid) VALUES ($1, $2, $3, $4, $5) RETURNING *");
         expect(query.values).toEqual(["Cody", "Zeitler", "Thomas", testParent.id, testParent.userid]);
     });
 
@@ -38,7 +38,7 @@ describe('create parent insert statement', function() {
 
         const query = testObject.generate(testParent);
         
-        expect(query.text).toBe("INSERT INTO parent(firstname, lastname, middlename, id, userid) VALUES ($1, $2, $3, $4, $5)");
+        expect(query.text).toBe("INSERT INTO parent(firstname, lastname, middlename, id, userid) VALUES ($1, $2, $3, $4, $5) RETURNING *");
         expect(query.values).toEqual(["Cody", "Zeitler", null, testParent.id, testParent.userid]);
     });
 
