@@ -1,4 +1,3 @@
-const server = require('./server');
 const express = require('express');
 const factory = require('./transaction.factory');
 const database = require('./database');
@@ -17,16 +16,7 @@ class Server {
             database : this.database
         });
 
-        this.app.post('/user', async (request, response) => {
-            try {
-                const transaction = await this.transactionFactory.create(
-                    factory.databaseType.USERS, factory.httpType.POST, request);
-
-                response.send(await transaction.execute());
-            } catch (e) {
-                console.log(e);
-            }
-        });
+        this.app.post('/user', this.postUser);
 
         this.app.post('/user/:userid/parent', async (request, response) => {
             try {
@@ -49,6 +39,17 @@ class Server {
 
     stop() {
         this.server.close();
+    }
+
+    async postUser(request, response) {
+        try {
+            const transaction = await this.transactionFactory.create(
+                factory.databaseType.USERS, factory.httpType.POST, request);
+
+            response.send(await transaction.execute());
+        } catch (e) {
+            console.log(e);
+        }
     }
 };
 

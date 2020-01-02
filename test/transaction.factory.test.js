@@ -61,40 +61,40 @@ describe('Transaction Creation', function() {
         expect(transaction.user).not.toBe(null);
     }); 
 
-    test('creation of transaction when databaseType is null, throw exception', function() {
+    test('creation of transaction when databaseType is null, throw exception', async function() {
         let exceptionThrown = false;
         try {
-            testObject.create(null, factory.httpType.POST, userAsJson);
+            await testObject.create(null, factory.httpType.POST, userAsJson);
         } catch (e) {
             exceptionThrown = true;
         }
         expect(exceptionThrown).toBe(true);
     });
 
-    test('creation of transaction when databaseType is undefined, throw exception', function() {
+    test('creation of transaction when databaseType is undefined, throw exception', async function() {
         let exceptionThrown = false;
         try {
-            testObject.create(undefined, factory.httpType.POST, userAsJson);
+            await testObject.create(undefined, factory.httpType.POST, userAsJson);
         } catch (e) {
             exceptionThrown = true;
         }
         expect(exceptionThrown).toBe(true);
     });
 
-    test('creation of transaction when httpType is null, throw exception', function() {
+    test('creation of transaction when httpType is null, throw exception', async function() {
         let exceptionThrown = false;
         try {
-            testObject.create(factory.databaseType.USERS, null, userAsJson);
+            await testObject.create(factory.databaseType.USERS, null, userAsJson);
         } catch (e) {
             exceptionThrown = true;
         }
         expect(exceptionThrown).toBe(true);
     });
 
-    test('creation of transaction when httpType is undefined, throw exception', function() {
+    test('creation of transaction when httpType is undefined, throw exception', async function() {
         let exceptionThrown = false;
         try {
-            testObject.create(factory.databaseType.USERS, undefined, userAsJson);
+            await testObject.create(factory.databaseType.USERS, undefined, userAsJson);
         } catch (e) {
             exceptionThrown = true;
         }
@@ -102,20 +102,20 @@ describe('Transaction Creation', function() {
         expect(exceptionThrown).toBe(true);
     });
 
-    test('creation of transaction with an invalid databaseType, throw exception', function() {
+    test('creation of transaction with an invalid databaseType, throw exception', async function() {
         let exceptionThrown = false;
         try {
-            testObject.create('thisisnotvalid', factory.httpType.POST, userAsJson);
+            await testObject.create('thisisnotvalid', factory.httpType.POST, userAsJson);
         } catch (e) {
             exceptionThrown = true;
         }
         expect(exceptionThrown).toBe(true);
     });
 
-    test('creationg of transaction with an invlalid httpType, throw exception', function() {
+    test('creationg of transaction with an invlalid httpType, throw exception', async function() {
         let exceptionThrown = false;
         try {
-            testObject.create(factory.databaseType.USERS, 'invalidhttptype', userAsJson);
+            await testObject.create(factory.databaseType.USERS, 'invalidhttptype', userAsJson);
         } catch (e) {
             exceptionThrown = true;
         }

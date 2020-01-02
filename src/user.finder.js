@@ -21,13 +21,28 @@ class UserFinder {
         if (id === null) {
             throw new Error("Cannot find a user with a null id");
         }
-
         if (id === undefined) {
             throw new Error("Cannot find a user with an undefined id");
         }
+
+        let found = null;
         const result = await this.database.read("SELECT * FROM users WHERE id = " + id);
-        const found = new user.User(result.rows[0].username, result.rows[0].password);
-        found.id = result.rows[0].id;
+        if (result === null || result === undefined || result.rows.length === 0) {
+            return found;
+        }
+
+        const row = result.rows[0];
+        if (row.username === undefined) {
+            throw new Error("Queried row did not have the 'username' attribute");
+        }
+
+        if (row.password === undefined) {
+            throw new Error("Queried row did not have the 'password' attribute");
+        }
+
+        found = new user.User(row.username, row.password);
+        found.id = row.id;
+        
         return found;
     }
 };

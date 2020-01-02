@@ -108,10 +108,6 @@ describe('parent post transaction', function() {
         const testUser = new user.User("username", "password");
         testUser.id = 100;
 
-        const testParent = new parent.Parent({
-            name : new name.Name("Cody", "Zeitler")
-        });
-
         let exceptionThrown = false;
         try {
             new transaction.ParentPostTransaction({
