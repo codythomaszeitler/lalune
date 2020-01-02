@@ -1,5 +1,6 @@
 const user = require('./user');
-
+const errormessage = require('./error.message');
+const usermapper = require('./user.mapper');
 class UserPostTransaction {
     constructor(describe) {
         if (describe.body === null) {
@@ -23,7 +24,17 @@ class UserPostTransaction {
             return;
         }
 
-        return await this.database.write(this.user);
+        let returnMessage;
+        try {
+            const result = await this.database.write(this.user);
+            const userMapper = new usermapper.UserMapper();
+            
+            returnMessage = userMapper.convertFromDatabase(result.row[0]);
+        } catch(e) {
+            throw e;
+        }
+
+        return returnMessage;
     }
 };
 

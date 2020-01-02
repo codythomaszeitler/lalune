@@ -1,8 +1,9 @@
-const user = require('./user');
+const usermapper = require('./user.mapper');
 
 class UserFinder {
     constructor(database) {
         this.database = database;
+        this.userMapper = new usermapper.UserMapper();
     }
 
     findByUsername(username) {
@@ -40,7 +41,7 @@ class UserFinder {
             throw new Error("Queried row did not have the 'password' attribute");
         }
 
-        found = new user.User(row.username, row.password);
+        found = this.userMapper.convertFromDatabase(row);
         found.id = row.id;
         
         return found;

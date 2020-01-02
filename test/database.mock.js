@@ -45,6 +45,7 @@ class Database {
         this.written.push(object);
         object.id = this.currentId;
         this.currentId++;
+        return object;
     }
 
     isWritten(object) {

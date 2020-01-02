@@ -45,9 +45,15 @@ class Database {
 
         const generator = new databasestatementgenerator.DatabaseStatementGenerator();
         const query = generator.generateInsertStatement(object);
-        await this.client.query(query);
 
-        return object;
+        let result;
+        try {
+            result = await this.client.query(query);
+        } catch (e) {
+            throw e;
+        }
+
+        return result;
     }
 
     async read(selectStatement) {

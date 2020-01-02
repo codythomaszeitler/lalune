@@ -1,22 +1,25 @@
 const express = require('express');
 const factory = require('./transaction.factory');
-const database = require('./database');
 
 class Server {
-    constructor(hostname, port) {
+    constructor(hostname, port, database) {
         this.hostname = hostname;
         this.port = port;
+        this.database = database;
 
-        this.database = new database.Database();
-
-        this.app = express();
-        this.app.use(express.json());
-        this.app.use(express.urlencoded({ extended: true }));
         this.transactionFactory = new factory.TransactionFactory({
             database : this.database
         });
+    }
 
-        this.app.post('/user', this.postUser);
+    start() {
+        this.app = express();
+        this.app.use(express.json());
+        this.app.use(express.urlencoded({ extended: true }));
+        this.app.post('/user', async (request, response) => {
+            this.postUser(request, response);
+        });
+        
 
         this.app.post('/user/:userid/parent', async (request, response) => {
             try {
@@ -28,9 +31,7 @@ class Server {
                 console.log(e);
             }
         });
-    }
 
-    start() {
         this.server = this.app.listen(this.port, () => {
             console.log(`Example app listening on port ${this.port}!`);
         });

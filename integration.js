@@ -54,7 +54,7 @@ req.on('error', function(e) {
 });
 
 
-const testUser = new user.User("cody1", "pass1");
+const testUser = new user.User("cody123", "pass1");
 req.write(JSON.stringify(testUser));
 req.end();
 
