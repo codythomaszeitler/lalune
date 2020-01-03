@@ -2,6 +2,7 @@ const generator = require('../src/database.statement.generator');
 const user = require('../src/user');
 const parent = require('../src/parent');
 const name = require('../src/name');
+const child = require('../src/child');
 
 describe('generate insert statement', function() {
 
@@ -33,6 +34,18 @@ describe('generate insert statement', function() {
         expect(query.text).toBe("INSERT INTO parent(firstname, lastname, middlename, id, userid) VALUES ($1, $2, $3, $4, $5) RETURNING *");
         expect(query.values).toEqual(["Cody", "Zeitler", "Thomas", 1000, 1000]);
     });
+
+    test('create insert query for child', function() {
+        const testChild = new child.Child({
+            name : new name.Name("Cody", "Zeitler", "Thomas"),
+            id : 1000,
+            parentid : 2000
+        });
+
+        const query = testObject.generateInsertStatement(testChild);
+        expect(query.text).toBe("INSERT INTO child(firstname, lastname, middlename, id, parentid) VALUES ($1, $2, $3, $4, $5) RETURNING *");
+        expect(query.values).toEqual(["Cody", "Zeitler", "Thomas", 1000, 2000]);
+   });
 
     test('against null object, throw exception', function() {
         let exceptionThrown = false;

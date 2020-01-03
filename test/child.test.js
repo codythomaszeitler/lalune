@@ -86,6 +86,22 @@ describe('child equality with other children', function() {
 
       expect(testObject.equals(expected)).toBe(false);
    });
+
+   test('when parent ids are not equivalent', function() {
+      const testObject = new child.Child({
+         name : new name.Name("Cody", "Zeitler"),
+         id : 250,
+         parentid : 300
+      });
+
+      const expected = new child.Child({
+         name : new name.Name("Cody", "Zeitler"),
+         id : 250,
+         parentid : 350
+      });
+
+      expect(testObject.equals(expected)).toBe(false);
+   });
 });
 
 describe('logging child sleep', function(){

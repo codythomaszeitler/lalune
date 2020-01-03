@@ -1,15 +1,26 @@
 const sleepevent = require('../src/sleepevent');
+const name = require('./name');
 
 class Child {
     constructor(details) {
         if (details !== undefined) {
             this.name = details.name;
-            this.database = details.database;
             this.id = details.id;
+            this.parentid = details.parentid;
         }
 
         this.type = 'child';
         this.sleeps = [];
+    }
+
+    static parse(details) {
+        const parsed = new Child({
+            name : new name.Name(details.name.firstName, details.name.lastName, details.name.middleName)
+        });
+        parsed.id = parseInt(details.id);
+        parsed.parentid = parseInt(details.parentid);
+
+        return parsed;
     }
 
     setName(name) {
@@ -48,6 +59,7 @@ class Child {
 
         let isEquals = this.name.equals(object.name);
         isEquals = isEquals && (this.id === object.id);
+        isEquals = isEquals && (this.parentid === object.parentid);
         return isEquals;
     }
 };

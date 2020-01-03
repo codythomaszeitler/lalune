@@ -7,7 +7,7 @@ class ChildMapper {
 
     }
 
-    convert(row) {
+    convertFromRow(row) {
 
         if (row === null) {
             throw new Error("Cannot convert null row");
@@ -27,5 +27,5 @@ class ChildMapper {
 };
 
 module.exports = {
-    ChildConverter : ChildMapper
+    ChildMapper : ChildMapper
 }

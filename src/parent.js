@@ -41,9 +41,13 @@ class Parent {
 
     static parse(details) {
         const parsedName = new name.Name(details.name.firstName, details.name.lastName, details.name.middleName);
-        return new Parent({
+
+        const parsed = new Parent({
             name : parsedName
         });
+        parsed.id = details.id;
+        parsed.userid = details.userid;
+        return parsed;
     }
 }
 

@@ -33,7 +33,6 @@ describe('parent post transaction', function() {
             database : testDatabase
         });
         await testObject.setup();
-
         await testObject.execute();
 
         const expected = parent.Parent.parse(parentDetails);

@@ -52,6 +52,7 @@ class Database {
 
         let result;
         try {
+            console.log(query);
             result = await this.client.query(query);
         } catch (e) {
             throw e;

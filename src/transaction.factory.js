@@ -1,5 +1,6 @@
 const userposttransaction = require('./user.post.transaction');
 const parentposttransaction = require('./parent.post.transaction');
+const childposttransaction = require('./child.post.transaction');
 
 class TransactionFactory {
     constructor(details) {
@@ -31,6 +32,13 @@ class TransactionFactory {
                 parentDetails : request.body,
                 database : this.database
             });
+        } else if (databaseType === databaseTypes.CHILD && httpType === httpTypes.POST) {
+            transaction = new childposttransaction.ChildPostTransaction({
+                userid : request.params.userid,
+                parentid : request.params.parentid,
+                childDetails : request.body,
+                database : this.database
+            }); 
         } else {
             throw new Error("Could not create transaction with database-type [" + 
                     databaseType + "] and http-type [" + httpType + "]");
@@ -46,7 +54,8 @@ class TransactionFactory {
 
 const databaseTypes = {
     USERS : 'users',
-    PARENT : 'parent'
+    PARENT : 'parent',
+    CHILD : 'child'
 };
 Object.freeze(databaseTypes);
 

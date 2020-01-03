@@ -26,8 +26,8 @@ class ParentMapper {
         const converted = new parent.Parent({
             name : new name.Name(databaseRow.firstname, databaseRow.lastname, databaseRow.middlename)
         });
-        converted.parentid = databaseRow.parentid;
-        converted.id = databaseRow.id;
+        converted.parentid = parseInt(databaseRow.parentid);
+        converted.id = parseInt(databaseRow.id);
 
         return converted;
     }

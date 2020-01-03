@@ -25,6 +25,10 @@ class Server {
             this.postParent(request, response);
         });
 
+        this.app.post('/user/:userid/parent/:parentid/child', async (request, response) => {
+            this.postChild(request, response);
+        });
+
         this.server = this.app.listen(this.port, () => {
             console.log(`Example app listening on port ${this.port}!`);
         });
@@ -50,6 +54,17 @@ class Server {
         try {
             const transaction = await this.transactionFactory.create(
                 factory.databaseType.PARENT, factory.httpType.POST, request);
+    
+            response.send(await transaction.execute());
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    async postChild(request, response) {
+        try {
+            const transaction = await this.transactionFactory.create(
+                factory.databaseType.CHILD, factory.httpType.POST, request);
     
             response.send(await transaction.execute());
         } catch (e) {

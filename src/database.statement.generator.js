@@ -1,5 +1,6 @@
 const userinsertgenerator = require('../src/user.insert.generator');
 const parentinsertgenerator = require('../src/parent.insert.generator');
+const childinsertgenerator = require('../src/child.insert.generator');
 
 class DatabaseStatementGenerator {
     generateInsertStatement(object) {
@@ -18,6 +19,9 @@ class DatabaseStatementGenerator {
             query = generator.generate(object);
         } else if (object.type === 'parent') {
             const generator = new parentinsertgenerator.ParentInsertGenerator();
+            query = generator.generate(object);
+        } else if (object.type === 'child') {
+            const generator = new childinsertgenerator.ChildInsertGenerator();
             query = generator.generate(object);
         } else {
             throw new Error("The object with type [" + object.type + "] is not supported for query conversion")

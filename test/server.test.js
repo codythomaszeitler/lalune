@@ -31,13 +31,7 @@ describe('Post User', function() {
 
     });
 
-    test('posting a brand new user', async function() {
-        // await testObject.postUser(request, response);
+    test('posting a new child', async function() {
 
-        // const expected = user.User.parse(userAsJson);
-        // expect(testDatabase.isWritten(expected)).toBe(true);
-
-        // expect(response.response.username).toBe(userAsJson.username);
-        // expect(response.response.password).toBe(userAsJson.password);
-    });
+    });    
 });

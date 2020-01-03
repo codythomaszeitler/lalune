@@ -7,8 +7,8 @@ describe('mapping from in-memory to database representation', function() {
     test('database representation to child object', function() {
         const databaseItem = { firstname: 'Cody', lastname: 'Zeitler', middlename: 'Thomas', id: '100' };
 
-        const testObject = new mapper.ChildConverter();
-        const converted = testObject.convert(databaseItem);
+        const testObject = new mapper.ChildMapper();
+        const converted = testObject.convertFromRow(databaseItem);
         
         const expected = new child.Child({
             name : new name.Name("Cody", "Zeitler", "Thomas"),
@@ -21,8 +21,8 @@ describe('mapping from in-memory to database representation', function() {
     test('database representation to child object when database item does not have middle name', function() {
         const databaseItem = { firstname: 'Cody', lastname: 'Zeitler', id: '100' };
 
-        const testObject = new mapper.ChildConverter();
-        const converted = testObject.convert(databaseItem);
+        const testObject = new mapper.ChildMapper();
+        const converted = testObject.convertFromRow(databaseItem);
 
         const expected = new child.Child({
             name : new name.Name("Cody", "Zeitler"),
@@ -33,11 +33,11 @@ describe('mapping from in-memory to database representation', function() {
     });
 
     test('empty database representation throws exception', function() {
-        const testObject = new mapper.ChildConverter();
+        const testObject = new mapper.ChildMapper();
 
         let caughtException = null;
         try {
-            testObject.convert({});
+            testObject.convertFromRow({});
         } catch (e) {
             caughtException = e;
         }
@@ -46,11 +46,11 @@ describe('mapping from in-memory to database representation', function() {
     });
 
     test('null database representation throws exception', function() {
-        const testObject = new mapper.ChildConverter();
+        const testObject = new mapper.ChildMapper();
 
         let threwException = false;
         try {
-            testObject.convert(null);
+            testObject.convertFromRow(null);
         } catch (e) {
             threwException = true;
         }
