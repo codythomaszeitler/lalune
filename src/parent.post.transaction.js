@@ -1,5 +1,6 @@
 const finder = require('./user.finder');
 const parent = require('./parent');
+const parentmapper = require('./parent.mapper');
 
 class ParentPostTransaction {
     constructor(details) {
@@ -24,6 +25,8 @@ class ParentPostTransaction {
         this.database = details.database;
         this.userid = details.userid;
         this.user = null;
+
+        this.parentMapper = new parentmapper.ParentMapper();
     }
 
     async setup() {
@@ -33,7 +36,11 @@ class ParentPostTransaction {
 
     async execute() {
         this.parent.userid = this.user.id;
-        return await this.database.write(this.parent);
+
+        const result = await this.database.write(this.parent);
+        const converted = this.parentMapper.convertFromRow(result.rows[0]);
+
+        return converted;
     }
 };
 

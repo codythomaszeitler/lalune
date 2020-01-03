@@ -14,14 +14,14 @@ describe('User Map from DB to InMem', function() {
         const result = databaseresult.Result.convert(testUser);
         const row = result.rows[0];
 
-        expect(testObject.convertFromDatabase(row).equals(testUser)).toBe(true);
+        expect(testObject.convertFromRow(row).equals(testUser)).toBe(true);
     });
 
     test('convert from null database row, throw exception', function() {
 
         let exceptionThrown = false;
         try {
-            testObject.convertFromDatabase(null);
+            testObject.convertFromRow(null);
         } catch (e) {
             exceptionThrown = true;
             expect(e.message).toBe("Cannot convert non-existent database row into user");
@@ -33,7 +33,7 @@ describe('User Map from DB to InMem', function() {
 
         let exceptionThrown = false;
         try {
-            testObject.convertFromDatabase();
+            testObject.convertFromRow();
         } catch (e) {
             exceptionThrown = true;
             expect(e.message).toBe("Cannot convert non-existent database row into user");

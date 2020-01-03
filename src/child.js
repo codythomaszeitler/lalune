@@ -8,6 +8,7 @@ class Child {
             this.id = details.id;
         }
 
+        this.type = 'child';
         this.sleeps = [];
     }
 

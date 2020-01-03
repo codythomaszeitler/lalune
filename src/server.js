@@ -16,20 +16,13 @@ class Server {
         this.app = express();
         this.app.use(express.json());
         this.app.use(express.urlencoded({ extended: true }));
+
         this.app.post('/user', async (request, response) => {
             this.postUser(request, response);
         });
         
-
         this.app.post('/user/:userid/parent', async (request, response) => {
-            try {
-                const transaction = await this.transactionFactory.create(
-                    factory.databaseType.PARENT, factory.httpType.POST, request);
-        
-                response.send(await transaction.execute());
-            } catch (e) {
-                console.log(e);
-            }
+            this.postParent(request, response);
         });
 
         this.server = this.app.listen(this.port, () => {
@@ -47,6 +40,17 @@ class Server {
             const transaction = await this.transactionFactory.create(
                 factory.databaseType.USERS, factory.httpType.POST, request);
 
+            response.send(await transaction.execute());
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    async postParent(request, response) {
+        try {
+            const transaction = await this.transactionFactory.create(
+                factory.databaseType.PARENT, factory.httpType.POST, request);
+    
             response.send(await transaction.execute());
         } catch (e) {
             console.log(e);

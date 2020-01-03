@@ -1,3 +1,5 @@
+const databaserow = require('./database.result.mock');
+
 class Database {
 
     constructor() {
@@ -45,7 +47,7 @@ class Database {
         this.written.push(object);
         object.id = this.currentId;
         this.currentId++;
-        return object;
+        return databaserow.Result.convert(object);
     }
 
     isWritten(object) {

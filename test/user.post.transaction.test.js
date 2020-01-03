@@ -3,7 +3,7 @@ const database = require('./database.mock');
 const transaction = require('../src/user.post.transaction');
 
 describe('Nominal Transaction', function() {
-    test('creating a simple user', function() {
+    test('creating a simple user', async function() {
 
         const testDatabase = new database.Database();
         
@@ -17,13 +17,13 @@ describe('Nominal Transaction', function() {
             database : testDatabase
         });
 
-        testObject.execute();
+        await testObject.execute();
 
         const expected = new user.User(body.username, body.password);
         expect(testDatabase.isWritten(expected)).toBe(true);
     });
 
-    test('creating a user without password', function() {
+    test('creating a user without password', async function() {
         const testDatabase = new database.Database();
 
         const body = {
@@ -35,13 +35,13 @@ describe('Nominal Transaction', function() {
             database : testDatabase
         });
 
-        testObject.execute();
+        await testObject.execute();
 
         const expected = new user.User(body.username);
         expect(testDatabase.isWritten(expected)).toBe(false);
     });
 
-    test('creating a user with a null password', function() {
+    test('creating a user with a null password', async function() {
         const testDatabase = new database.Database();
 
         const body = {
@@ -54,13 +54,13 @@ describe('Nominal Transaction', function() {
             database : testDatabase
         });
 
-        testObject.execute();
+        await testObject.execute();
 
         const expected = new user.User(body.username, body.password);
         expect(testDatabase.isWritten(expected)).toBe(false);
     });
 
-    test('creating a user without a username', function() {
+    test('creating a user without a username', async function() {
         const testDatabase = new database.Database();
 
         const body = {
@@ -73,13 +73,13 @@ describe('Nominal Transaction', function() {
             database : testDatabase
         });
 
-        testObject.execute();
+        await testObject.execute();
 
         const expected = new user.User(body.username, body.password);
         expect(testDatabase.isWritten(expected)).toBe(false);
     });
 
-    test('creating a user with a null username', function() {
+    test('creating a user with a null username', async function() {
         const testDatabase = new database.Database();
 
         const body = {
@@ -92,7 +92,7 @@ describe('Nominal Transaction', function() {
             database : testDatabase
         });
 
-        testObject.execute();
+        await testObject.execute();
 
         const expected = new user.User(body.username, body.password);
         expect(testDatabase.isWritten(expected)).toBe(false);

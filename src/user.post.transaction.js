@@ -28,8 +28,7 @@ class UserPostTransaction {
         try {
             const result = await this.database.write(this.user);
             const userMapper = new usermapper.UserMapper();
-            
-            returnMessage = userMapper.convertFromDatabase(result.row[0]);
+            returnMessage = userMapper.convertFromRow(result.rows[0]);
         } catch(e) {
             throw e;
         }

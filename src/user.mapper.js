@@ -5,13 +5,13 @@ class UserMapper {
 
     }
 
-    convertFromDatabase(databaseRow) {
+    convertFromRow(databaseRow) {
         if (databaseRow === null || databaseRow === undefined) {
             throw new Error("Cannot convert non-existent database row into user");
         }
 
         const converted = new user.User(databaseRow.username, databaseRow.password);
-        converted.id = databaseRow.id;
+        converted.id = parseInt(databaseRow.id);
         return converted;
     }
 };

@@ -53,8 +53,15 @@ req.on('error', function(e) {
   console.log('problem with request: ' + e.message);
 });
 
+/**
+ * Returns a random number between min (inclusive) and max (exclusive)
+ */
+function getRandomArbitrary(min, max) {
+  return Math.random() * (max - min) + min;
+}
 
-const testUser = new user.User("cody123", "pass1");
+const testUser = new user.User("cody" + getRandomArbitrary(0, Math.floor(Number.MAX_SAFE_INTEGER)), "pass1");
+console.log(JSON.stringify(testUser));
 req.write(JSON.stringify(testUser));
 req.end();
 

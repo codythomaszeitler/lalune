@@ -41,8 +41,7 @@ class UserFinder {
             throw new Error("Queried row did not have the 'password' attribute");
         }
 
-        found = this.userMapper.convertFromDatabase(row);
-        found.id = row.id;
+        found = this.userMapper.convertFromRow(row);
         
         return found;
     }

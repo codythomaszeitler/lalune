@@ -26,7 +26,10 @@ class Database {
             for (let i = 0; i < this.tableList.length; i++) {
                 const table = this.tableList[i];
                 this.client.query('SELECT MAX(id) FROM ' + table, (err, res) => {
-                    const max = parseInt(res.rows[0].max);
+                    let max = 0;
+                    if (res.rows[0].max !== null) {
+                        max = parseInt(res.rows[0].max);
+                    }
                     this.currentIds[table] = max + 1;
                 });
             }
@@ -36,6 +39,7 @@ class Database {
     async write(object) {
 
         var getNextIdAndIncrement = (table) => {
+            console.log(this.currentIds);
             const id = this.currentIds[table];
             this.currentIds[table] = this.currentIds[table] + 1;
             return id;
