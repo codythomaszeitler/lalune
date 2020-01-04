@@ -18,9 +18,16 @@ class ChildMapper {
         }
 
         const converted = new child.Child({
-            name : new name.Name(row.firstname, row.lastname, row.middlename),
-            id : parseInt(row.id, 10)
+            name : new name.Name(row.firstname, row.lastname, row.middlename)
         });
+
+        if (row.id !== undefined) {
+            converted.id = parseInt(row.id, 10);
+        } 
+
+        if (row.parentid !== undefined) {
+            converted.parentid = parseInt(row.parentid, 10);
+        } 
 
         return converted;
     }

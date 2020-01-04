@@ -308,3 +308,27 @@ describe('is before', function() {
         expect(a.isBefore()).toBe(false);
     });
 });
+
+describe('Parsing from JSON object', function() {
+    test('when all fields are set', function() {
+
+        const expected = new timestamp.Timestamp({
+            year : 2010,
+            month : timestamp.months.JANUARY,
+            day : 1,
+            minutes : 10,
+            seconds : 0
+        });
+
+        let timestampDetails = {
+            year : 2010,
+            month : 'January',
+            day : 1,
+            minutes : 10,
+            seconds : 0
+        };
+
+        const parsed = timestamp.Timestamp.parse(timestampDetails);
+        expect(expected.equals(parsed)).toBe(true);
+    });
+}); 

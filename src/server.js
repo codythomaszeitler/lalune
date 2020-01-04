@@ -29,6 +29,10 @@ class Server {
             this.postChild(request, response);
         });
 
+        this.app.post('/user/:userid/parent/:parentid/child/:childid/sleepevent', async (request, response) => {
+            this.postSleepEvent(request, response);
+        });
+
         this.server = this.app.listen(this.port, () => {
             console.log(`Example app listening on port ${this.port}!`);
         });
@@ -67,6 +71,19 @@ class Server {
                 factory.databaseType.CHILD, factory.httpType.POST, request);
     
             response.send(await transaction.execute());
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    async postSleepEvent(request, response) {
+        try {
+            const transaction = await this.transactionFactory.create(
+                factory.databaseType.SLEEP_EVENT, factory.httpType.POST, request);
+    
+                const responseValue = await transaction.execute();
+                console.log(responseValue);
+            response.send(responseValue);
         } catch (e) {
             console.log(e);
         }

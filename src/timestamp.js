@@ -1,10 +1,11 @@
 class Timestamp {
     constructor(describe) {
         this.year = 0;
-        this.day = 0;
-        this.seconds = 0;
         this.month = months.NOT_SET;
-
+        this.day = 0;
+        this.minutes = 0;
+        this.seconds = 0;
+        
         if (describe !== undefined) {
             this.setWithDescribe(describe);
         }
@@ -29,6 +30,11 @@ class Timestamp {
         if (describe.hour !== undefined) {
             this.hour = describe.hour;
         }
+    }
+
+    static parse(details) {
+        const parsed = new Timestamp(details);
+        return parsed;
     }
 
     getYear() {
@@ -129,6 +135,25 @@ class Timestamp {
         return date;
     }
 
+    static fromDate(from) {
+        const timestamp = new Timestamp({
+            year : from.getFullYear(),
+            month : Timestamp._parseMonth(from.getMonth()),
+            day : from.getDate(),
+            hour : from.getHours(),
+            minutes : from.getMinutes(),
+            seconds : from.getSeconds()
+        });
+
+        return timestamp;
+    }
+
+    static _parseMonth(offset) {
+        const mapping = {};
+        mapping[0] = months.JANUARY;
+        return mapping[offset];
+    }
+
     _parseMonthOffset(month) {
         let offset = -1;
         if (month === months.JANUARY) {
@@ -181,7 +206,7 @@ class InvalidTimestamp extends Error {
 
 const months = {
     NOT_SET : 'Month was not set',
-    JANUARY : 'January'
+    JANUARY : 'January',
 };
 Object.freeze(months);
 

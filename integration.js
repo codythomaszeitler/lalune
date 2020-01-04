@@ -3,6 +3,8 @@ var parent = require('./src/parent');
 var user = require('./src/user');
 var user = require('./src/user');
 var child = require('./src/child');
+var sleepevent = require('./src/sleepevent');
+var timestamp = require('./src/timestamp');
 
 var http = require("http");
 var options = {
@@ -59,8 +61,48 @@ var req = http.request(options, function(res) {
                 var childPostRequest = http.request(childPostOptions, function(childPostResponse) {
     
                   childPostResponse.setEncoding('utf8');
-                  childPostResponse.on('data', function(body) {
-                    console.log(body);
+                  childPostResponse.on('data', function(childbody) {
+                    childbody = JSON.parse(childbody);
+                    console.log(childbody);
+
+                    var sleepEventPostOptions = {
+                      hostname: 'localhost',
+                      port: 8080,
+                      path: '/user/' + userbody.id + '/parent/' + parentbody.id + '/child/' + childbody.id + '/sleepevent',
+                      method: 'POST',
+                      headers: {
+                          'Content-Type': 'application/json',
+                      }
+                    };
+
+                    var sleepEventPostRequest = http.request(sleepEventPostOptions, function(sleepEventPostResponse){
+                      sleepEventPostResponse.on('data', function(sleepeventbody){
+                        console.log(JSON.parse(sleepeventbody));
+                      });
+                    });
+
+                    var testSleepEvent = new sleepevent.SleepEvent(
+                      new timestamp.Timestamp({
+                        year : 2019,
+                        month : 'January',
+                        day : 1,
+                        hour : 1,
+                        minutes : 10,
+                        seconds : 0
+                      }),
+                      new timestamp.Timestamp({
+                        year : 2019,
+                        month : 'January',
+                        day : 1,
+                        hour : 1,
+                        minutes : 20,
+                        seconds : 0
+                      }),
+                      'Morning'
+                    );
+
+                    sleepEventPostRequest.write(JSON.stringify(testSleepEvent));
+                    sleepEventPostRequest.end();
                   });
     
                 });
